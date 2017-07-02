@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repositories version="1.0">
+  <repo priority="50" quality="experimental" status="unofficial">
+    <name>gridcoin</name>
+    <description></description>
+    <homepage>https://gridcoin.us/</homepage>
+    <owner>
+      <email>contact@gridcoin.us</email>
+      <name>Gridcoin Developers</name>
+    </owner>
+    <source type="git">https://github.com/nethershaw/gridcoin.git</source>
+  </repo>
+</repositories>

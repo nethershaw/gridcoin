@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>nethershaw@gmail.com</email>
+</maintainer>
+<longdescription lang="en">
+Gridcoin crypto-currency wallet that rewards BOINC computation
+https://gridcoin.us/
+https://github.com/gridcoin/Gridcoin-Research
+</longdescription>
+<use>
+<flag name="dbus">
+Enable desktop notifications via DBus
+</flag>
+<flag name="pie">
+Build binaries as Position Independent Executables (a security hardening technique)
+</flag>
+<flag name="qrcode">
+Enable generation of QR Codes for receiving payments with media-gfx/qrencode
+</flag>
+<flag name="qt5">
+Build the Qt GUI
+</flag>
+<flag name="upnp">
+Enable Universal Plug and Play
+</flag>
+</use>
+</pkgmetadata>
