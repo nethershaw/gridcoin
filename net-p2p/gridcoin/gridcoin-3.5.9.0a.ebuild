@@ -5,23 +5,27 @@ EAPI=6
 
 inherit flag-o-matic
 inherit qmake-utils
+inherit user
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
 SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/${PV}.tar.gz"
 
+RESTRICT="primaryuri"
+
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="dbus pie qrcode qt5 upnp"
+IUSE="+boinc dbus pie qrcode qt5 upnp"
 
 DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
 	>=sys-libs/db-5.3.28:*
-	dbus? ( sys-apps/dbus )
+	dbus? ( dev-qt/qtdbus:5 )
 	qrcode? ( media-gfx/qrencode )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 )
-	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )"
+	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
+	boinc? ( sci-misc/boinc )"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/Gridcoin-Research-${PV}"
@@ -39,6 +43,11 @@ pkg_setup() {
 	use upnp && BUILDOPTS+="USE_UPNP=1 "
 	use qrcode && BUILDOPTS+="USE_QRCODE=1 "
 	use pie	&& host-is-pax && BUILDOPTS+="-e PIE=1 "
+
+	enewgroup ${PN}
+	local groups="${PN}"
+	use boinc && groups+=",boinc"
+	enewuser ${PN} -1 -1 /var/lib/${PN} "${groups}"
 }
 
 src_unpack() {
@@ -60,8 +69,35 @@ src_compile() {
 
 src_install() {
 	newbin src/gridcoinresearchd gridcoind
-	use qt5 && newbin gridcoinresearch gridcoin-qt
 	newman doc/gridcoinresearchd.1 gridcoind.1
-	use qt5 && newman doc/gridcoinresearch.1 gridcoin-qt.1
+	if use qt5 ; then
+		newbin gridcoinresearch gridcoin-qt
+		newman doc/gridcoinresearch.1 gridcoin-qt.1
+	fi
 	dodoc README.md CHANGELOG.md INSTALL CompilingGridcoinOnLinux.txt
+
+	diropts -o${PN} -g${PN}
+	keepdir /var/lib/${PN}/.GridcoinResearch/
+	insinto /var/lib/${PN}/.GridcoinResearch/
+	insopts -o${PN} -g${PN} -m0600
+	doins "${FILESDIR}"/gridcoinresearch.conf
+}
+
+pkg_postinst() {
+	elog
+	elog "You are using a source compiled version of gridcoin."
+	elog "The daemon can be found at /usr/bin/gridcoind"
+	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoin-qt"
+	elog
+	elog "You need to configure this node with a few basic details to do anything useful with gridcoin."
+	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf"
+	elog "The howto for this configuration file is located at:"
+	elog "http://wiki.gridcoin.us/Gridcoinresearch_config_file"
+	elog
+	if use boinc ; then
+		elog "To run your wallet as a researcher you should add gridcoin user to boinc group."
+		elog "Run as root:"
+		elog "gpasswd -a gridcoin boinc"
+		elog
+	fi
 }

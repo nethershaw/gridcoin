@@ -10,6 +10,9 @@ https://gridcoin.us/
 https://github.com/gridcoin/Gridcoin-Research
 </longdescription>
 <use>
+<flag name="boinc">
+Enable research wallet functions for BOINC mining.
+</flag>
 <flag name="dbus">
 Enable desktop notifications via DBus
 </flag>
