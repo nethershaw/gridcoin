@@ -47,7 +47,7 @@ pkg_setup() {
 	enewgroup ${PN}
 	local groups="${PN}"
 	use boinc && groups+=",boinc"
-	enewuser ${PN} -1 -1 /var/lib/${PN} "${groups}"
+	enewuser ${PN} -1 /bin/bash /var/lib/${PN} "${groups}"
 }
 
 src_unpack() {
