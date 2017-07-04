@@ -1,9 +1,7 @@
-# Enclose CXXFLAGS and LFLAGS assignments in quotes to avoid compiler errors.
-
---- Gridcoin-Research-development/gridcoinresearch.pro
-+++ Gridcoin-Research-development/gridcoinresearch.pro
-@@ -68,8 +68,8 @@
-
+--- Gridcoin-Research-3.5.9.1/gridcoinresearch.pro
++++ Gridcoin-Research-3.5.9.1/gridcoinresearch.pro
+@@ -68,8 +68,8 @@ contains(RELEASE, 1) {
+ 
  !win32 {
      # for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
 -    QMAKE_CXXFLAGS *= -fstack-protector-all --param ssp-buffer-size=1

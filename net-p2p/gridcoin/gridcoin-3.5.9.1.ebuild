@@ -9,13 +9,13 @@ inherit user
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
-SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/development.tar.gz"
+SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/${PV}.tar.gz"
 
-RESTRICT="mirror"
+RESTRICT="primaryuri"
 
 LICENSE="MIT"
-SLOT="testnet"
-KEYWORDS=""
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
 IUSE="+boinc dbus pie qrcode qt5 upnp"
 
 DEPEND=">=dev-libs/boost-1.55.0
@@ -28,7 +28,7 @@ DEPEND=">=dev-libs/boost-1.55.0
 	boinc? ( sci-misc/boinc )"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/Gridcoin-Research-development"
+S="${WORKDIR}/Gridcoin-Research-${PV}"
 
 pkg_pretend() {
 	if use pie ; then
@@ -47,13 +47,14 @@ pkg_setup() {
 	enewgroup ${PN}
 	local groups="${PN}"
 	use boinc && groups+=",boinc"
-	enewuser ${PN} -1 /bin/bash /var/lib/${PN} "${groups}"
+	enewuser ${PN} -1 -1 /var/lib/${PN} "${groups}"
 }
 
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	if use qt5 ; then
+		epatch "${FILESDIR}/${P}-pr413-xmlsyntax.patch"
 		epatch "${FILESDIR}/${P}-pr414-quoteflags.patch"
 	fi
 }
@@ -70,33 +71,29 @@ src_compile() {
 }
 
 src_install() {
-	newbin src/gridcoinresearchd gridcoind-testnet
-	newman doc/gridcoinresearchd.1 gridcoind-testnet.1
+	newbin src/gridcoinresearchd gridcoind
+	newman doc/gridcoinresearchd.1 gridcoind.1
 	if use qt5 ; then
-		newbin gridcoinresearch gridcoin-qt-testnet
-		newman doc/gridcoinresearch.1 gridcoin-qt-testnet.1
+		newbin gridcoinresearch gridcoin-qt
+		newman doc/gridcoinresearch.1 gridcoin-qt.1
 	fi
 	dodoc README.md CHANGELOG.md INSTALL CompilingGridcoinOnLinux.txt
 
 	diropts -o${PN} -g${PN}
-	keepdir /var/lib/${PN}/.GridcoinResearch/testnet/
-	insinto /var/lib/${PN}/.GridcoinResearch/testnet/
+	keepdir /var/lib/${PN}/.GridcoinResearch/
+	insinto /var/lib/${PN}/.GridcoinResearch/
 	insopts -o${PN} -g${PN} -m0600
-	newins "${FILESDIR}"/gridcoinresearch-testnet.conf gridcoinresearch.conf
+	doins "${FILESDIR}"/gridcoinresearch.conf
 }
 
 pkg_postinst() {
 	elog
-	elog "You are using a source compiled version of the gridcoin development branch."
-	ewarn "NB: This branch is only intended for debugging on the gridcoin testnet!"
-	ewarn "    Only proceed if you know what you are doing."
-	elog
-	elog "The daemon can be found at /usr/bin/gridcoind-testnet"
-	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoin-qt-testnet"
-	ewarn "Remember to run with the '-testnet' option."
+	elog "You are using a source compiled version of gridcoin."
+	elog "The daemon can be found at /usr/bin/gridcoind"
+	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoin-qt"
 	elog
 	elog "You need to configure this node with a few basic details to do anything useful with gridcoin."
-	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/testnet/gridcoinresearch.conf"
+	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf"
 	elog "The howto for this configuration file is located at:"
 	elog "http://wiki.gridcoin.us/Gridcoinresearch_config_file"
 	elog
