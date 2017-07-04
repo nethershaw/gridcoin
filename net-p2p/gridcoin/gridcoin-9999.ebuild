@@ -54,7 +54,7 @@ src_unpack() {
 	unpack ${A}
 	cd "${S}"
 	if use qt5 ; then
-		epatch "${FILESDIR}/${P}-pr414-quoteflags.patch"
+		epatch "${FILESDIR}/${P}-pr414-appendflags.patch"
 	fi
 }
 
