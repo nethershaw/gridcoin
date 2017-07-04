@@ -81,9 +81,10 @@ src_install() {
 
 	diropts -o${PN} -g${PN}
 	keepdir /var/lib/${PN}/.GridcoinResearch/
-	insinto /var/lib/${PN}/.GridcoinResearch/
-	insopts -o${PN} -g${PN} -m0600
-	doins "${FILESDIR}"/gridcoinresearch.conf
+	fowners gridcoin:gridcoin /etc/conf.d/gridcoinresearch
+	fperms 0660 /etc/conf.d/gridcoinresearch
+	newconfd "${FILESDIR}"/gridcoinresearch.conf gridcoinresearch
+	dosym /etc/conf.d/gridcoinresearch /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf
 }
 
 pkg_postinst() {
