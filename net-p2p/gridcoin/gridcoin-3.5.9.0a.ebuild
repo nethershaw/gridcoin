@@ -68,11 +68,11 @@ src_compile() {
 }
 
 src_install() {
-	newbin src/gridcoinresearchd gridcoind
-	newman doc/gridcoinresearchd.1 gridcoind.1
+	dobin src/gridcoinresearchd
+	doman doc/gridcoinresearchd.1
 	if use qt5 ; then
-		newbin gridcoinresearch gridcoin-qt
-		newman doc/gridcoinresearch.1 gridcoin-qt.1
+		dobin gridcoinresearch
+		dobin doc/gridcoinresearch.1
 	fi
 	dodoc README.md CHANGELOG.md INSTALL CompilingGridcoinOnLinux.txt
 
@@ -86,8 +86,8 @@ src_install() {
 pkg_postinst() {
 	elog
 	elog "You are using a source compiled version of gridcoin."
-	elog "The daemon can be found at /usr/bin/gridcoind"
-	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoin-qt"
+	elog "The daemon can be found at /usr/bin/gridcoinresearchd"
+	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoinresearch"
 	elog
 	elog "You need to configure this node with a few basic details to do anything useful with gridcoin."
 	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf"

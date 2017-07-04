@@ -70,11 +70,11 @@ src_compile() {
 }
 
 src_install() {
-	newbin src/gridcoinresearchd gridcoind-testnet
-	newman doc/gridcoinresearchd.1 gridcoind-testnet.1
+	newbin src/gridcoinresearchd gridcoinresearchd-testnet
+	newman doc/gridcoinresearchd.1 gridcoinresearchd-testnet.1
 	if use qt5 ; then
-		newbin gridcoinresearch gridcoin-qt-testnet
-		newman doc/gridcoinresearch.1 gridcoin-qt-testnet.1
+		newbin gridcoinresearch gridcoinresearch-testnet
+		newman doc/gridcoinresearch.1 gridcoinresearch-testnet.1
 	fi
 	dodoc README.md CHANGELOG.md INSTALL CompilingGridcoinOnLinux.txt
 
@@ -91,8 +91,8 @@ pkg_postinst() {
 	ewarn "NB: This branch is only intended for debugging on the gridcoin testnet!"
 	ewarn "    Only proceed if you know what you are doing."
 	elog
-	elog "The daemon can be found at /usr/bin/gridcoind-testnet"
-	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoin-qt-testnet"
+	elog "The daemon can be found at /usr/bin/gridcoinresearchd-testnet"
+	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoinresearch-testnet"
 	ewarn "Remember to run with the '-testnet' option."
 	elog
 	elog "You need to configure this node with a few basic details to do anything useful with gridcoin."
