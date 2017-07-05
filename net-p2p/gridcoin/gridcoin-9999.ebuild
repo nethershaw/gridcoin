@@ -9,7 +9,7 @@ inherit user
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
-SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/development.tar.gz"
+SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/development.tar.gz -> ${P}.tar.gz"
 
 RESTRICT="mirror"
 
