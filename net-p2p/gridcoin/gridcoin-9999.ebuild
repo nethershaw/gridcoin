@@ -52,10 +52,6 @@ pkg_setup() {
 
 src_unpack() {
 	unpack ${A}
-	cd "${S}"
-	if use qt5 ; then
-		epatch "${FILESDIR}/${P}-pr414-appendflags.patch"
-	fi
 }
 
 src_compile() {
