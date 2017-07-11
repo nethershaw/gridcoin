@@ -9,7 +9,7 @@ inherit user
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
-SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/development.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/staging.tar.gz -> ${P}.tar.gz"
 
 RESTRICT="mirror"
 
@@ -28,7 +28,7 @@ DEPEND=">=dev-libs/boost-1.55.0
 	boinc? ( sci-misc/boinc )"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/Gridcoin-Research-development"
+S="${WORKDIR}/Gridcoin-Research-staging"
 
 pkg_pretend() {
 	if use pie ; then
@@ -84,7 +84,7 @@ src_install() {
 
 pkg_postinst() {
 	elog
-	elog "You are using a source compiled version of the gridcoin development branch."
+	elog "You are using a source compiled version of the gridcoin staging branch."
 	ewarn "NB: This branch is only intended for debugging on the gridcoin testnet!"
 	ewarn "    Only proceed if you know what you are doing."
 	elog
