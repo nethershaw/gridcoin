@@ -6,12 +6,12 @@ EAPI=6
 inherit flag-o-matic
 inherit qmake-utils
 inherit user
+inherit git-r3
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
-SRC_URI="https://github.com/${PN}/Gridcoin-Research/archive/staging.tar.gz -> ${P}.tar.gz"
-
-RESTRICT="mirror"
+EGIT_REPO_URI="https://github.com/gridcoin/Gridcoin-Research.git"
+EGIT_BRANCH="staging"
 
 LICENSE="MIT"
 SLOT="testnet"
@@ -23,7 +23,7 @@ DEPEND=">=dev-libs/boost-1.55.0
 	>=sys-libs/db-5.3.28:*
 	dbus? ( dev-qt/qtdbus:5 )
 	qrcode? ( media-gfx/qrencode )
-	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 )
+	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
 	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
 	boinc? ( sci-misc/boinc )"
 RDEPEND="${DEPEND}"
@@ -51,7 +51,9 @@ pkg_setup() {
 }
 
 src_unpack() {
-	unpack ${A}
+	git-r3_src_unpack
+	mkdir -p "$(dirname "${S}")" || die
+	ln -s "${WORKDIR}/${P}" "${S}" || die
 }
 
 src_compile() {
