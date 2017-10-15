@@ -81,7 +81,7 @@ src_install() {
 	newconfd "${FILESDIR}"/gridcoinresearch.conf gridcoinresearch
 	fowners gridcoin:gridcoin /etc/conf.d/gridcoinresearch
 	fperms 0660 /etc/conf.d/gridcoinresearch
-	dosym /etc/conf.d/gridcoinresearch /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf
+	dosym ../../../../etc/conf.d/gridcoinresearch /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf
 }
 
 pkg_postinst() {
