@@ -16,7 +16,7 @@ EGIT_COMMIT="${PV}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+boinc dbus pie qrcode qt5 upnp"
+IUSE="+boinc dbus qrcode qt5 upnp"
 
 DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
@@ -30,19 +30,12 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/Gridcoin-Research-${PV}"
 
-pkg_pretend() {
-	if use pie ; then
-		host-is-pax || die "PIE enabled in USE but host not PAX capable! Select a hardened profile."
-	fi
-}
-
 pkg_setup() {
 	BDB_VER="$(best_version sys-libs/db)"
 	export BDB_INCLUDE_PATH="/usr/include/db${BDB_VER:12:3}"
 	use upnp || BUILDOPTS+="USE_UPNP=- "
 	use upnp && BUILDOPTS+="USE_UPNP=1 "
 	use qrcode && BUILDOPTS+="USE_QRCODE=1 "
-	use pie	&& host-is-pax && BUILDOPTS+="-e PIE=1 "
 
 	enewgroup ${PN}
 	local groups="${PN}"
