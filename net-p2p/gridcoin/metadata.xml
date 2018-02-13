@@ -16,9 +16,6 @@ Enable research wallet functions for BOINC mining.
 <flag name="dbus">
 Enable desktop notifications via DBus
 </flag>
-<flag name="pie">
-Build binaries as Position Independent Executables (a security hardening technique)
-</flag>
 <flag name="qrcode">
 Enable generation of QR Codes for receiving payments with media-gfx/qrencode
 </flag>
