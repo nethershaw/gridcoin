@@ -11,11 +11,11 @@ inherit git-r3
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
 EGIT_REPO_URI="https://github.com/gridcoin/Gridcoin-Research.git"
-EGIT_COMMIT="${PV}"
+EGIT_BRANCH="staging"
 
 LICENSE="MIT"
-SLOT="0"
-KEYWORDS="~amd64 ~x86"
+SLOT="testnet"
+KEYWORDS=""
 IUSE="+boinc dbus qrcode qt5 upnp"
 
 DEPEND=">=dev-libs/boost-1.55.0
@@ -28,13 +28,15 @@ DEPEND=">=dev-libs/boost-1.55.0
 	boinc? ( sci-misc/boinc )"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/Gridcoin-Research-${PV}"
+S="${WORKDIR}/Gridcoin-Research-staging"
 
 pkg_setup() {
 	BDB_VER="$(best_version sys-libs/db)"
 	export BDB_INCLUDE_PATH="/usr/include/db${BDB_VER:12:3}"
 	use upnp || BUILDOPTS+="USE_UPNP=- "
 	use upnp && BUILDOPTS+="USE_UPNP=1 "
+	use dbus || BUILDOPTS+="USE_DBUS=- "
+	use dbus && BUILDOPTS+="USE_DBUS=1 "
 	use qrcode && BUILDOPTS+="USE_QRCODE=1 "
 
 	enewgroup ${PN}
@@ -61,30 +63,34 @@ src_compile() {
 }
 
 src_install() {
-	dobin src/gridcoinresearchd
-	doman doc/gridcoinresearchd.1
+	newbin src/gridcoinresearchd gridcoinresearchd-testnet
+	newman doc/gridcoinresearchd.1 gridcoinresearchd-testnet.1
 	if use qt5 ; then
-		dobin gridcoinresearch
-		doman doc/gridcoinresearch.1
+		newbin gridcoinresearch gridcoinresearch-testnet
+		newman doc/gridcoinresearch.1 gridcoinresearch-testnet.1
 	fi
 	dodoc README.md CHANGELOG.md INSTALL CompilingGridcoinOnLinux.txt
 
 	diropts -o${PN} -g${PN}
-	keepdir /var/lib/${PN}/.GridcoinResearch/
-	newconfd "${FILESDIR}"/gridcoinresearch.conf gridcoinresearch
-	fowners gridcoin:gridcoin /etc/conf.d/gridcoinresearch
-	fperms 0660 /etc/conf.d/gridcoinresearch
-	dosym ../../../../etc/conf.d/gridcoinresearch /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf
+	keepdir /var/lib/${PN}/.GridcoinResearch/testnet/
+	newconfd "${FILESDIR}"/gridcoinresearch-testnet.conf gridcoinresearch-testnet
+	fowners gridcoin:gridcoin /etc/conf.d/gridcoinresearch-testnet
+	fperms 0660 /etc/conf.d/gridcoinresearch-testnet
+	dosym ../../../../etc/conf.d/gridcoinresearch-testnet /var/lib/${PN}/.GridcoinResearch/testnet/gridcoinresearch.conf
 }
 
 pkg_postinst() {
 	elog
-	elog "You are using a source compiled version of gridcoin."
-	elog "The daemon can be found at /usr/bin/gridcoinresearchd"
-	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoinresearch"
+	elog "You are using a source compiled version of the gridcoin staging branch."
+	ewarn "NB: This branch is only intended for debugging on the gridcoin testnet!"
+	ewarn "    Only proceed if you know what you are doing."
+	elog
+	elog "The daemon can be found at /usr/bin/gridcoinresearchd-testnet"
+	use qt5 && elog "The graphical manager can be found at /usr/bin/gridcoinresearch-testnet"
+	ewarn "Remember to run with the '-testnet' option."
 	elog
 	elog "You need to configure this node with a few basic details to do anything useful with gridcoin."
-	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf"
+	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/testnet/gridcoinresearch.conf"
 	elog "The howto for this configuration file is located at:"
 	elog "http://wiki.gridcoin.us/Gridcoinresearch_config_file"
 	elog
