@@ -21,6 +21,7 @@ IUSE="+boinc dbus qrcode qt5 upnp"
 DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
 	>=sys-libs/db-5.3.28:*
+	>=dev-libs/libzip-1.3.0
 	dbus? ( dev-qt/qtdbus:5 )
 	qrcode? ( media-gfx/qrencode )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
