@@ -11,7 +11,7 @@ inherit git-r3
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
 EGIT_REPO_URI="https://github.com/gridcoin/Gridcoin-Research.git"
-EGIT_BRANCH="staging"
+EGIT_BRANCH="development"
 
 LICENSE="MIT"
 SLOT="testnet"
