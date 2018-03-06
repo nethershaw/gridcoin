@@ -32,7 +32,7 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/gridcoin-${PV}"
 
 pkg_setup() {
-	BDB_VER="$(best_version sys-libs/db)"
+	BDB_VER="$(best_version sys-libs/db:4.8)"
 	export BDB_INCLUDE_PATH="/usr/include/db${BDB_VER:12:3}"
 
 	enewgroup ${PN}
