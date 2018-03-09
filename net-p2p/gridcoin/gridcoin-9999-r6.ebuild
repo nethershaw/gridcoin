@@ -15,18 +15,25 @@ EGIT_BRANCH="development"
 LICENSE="MIT"
 SLOT="testnet"
 KEYWORDS=""
-IUSE="+boinc daemon dbus qrcode qt5 upnp"
+
+IUSE_GUI="qt5 dbus"
+IUSE_DAEMON="daemon"
+IUSE_OPTIONAL="+boinc qrcode upnp pic libraries utils +harden bench ccache static debug test"
+IUSE="${IUSE_GUI} ${IUSE_DAEMON} ${IUSE_OPTIONAL}"
+
+REQUIRED_USE="|| ( daemon qt5 ) dbus? ( qt5 ) qrcode? ( qt5 )"
 
 DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
-	sys-libs/db:4.8
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
+	sys-libs/db:4.8
 	dbus? ( dev-qt/qtdbus:5 )
-	qrcode? ( media-gfx/qrencode )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
+	qrcode? ( media-gfx/qrencode )
 	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
-	boinc? ( sci-misc/boinc )"
+	boinc? ( sci-misc/boinc )
+	utils? ( net-p2p/bitcoin-cli dev-util/bitcoin-tx )"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/gridcoin-${PV}"
@@ -48,17 +55,34 @@ src_unpack() {
 }
 
 src_prepare() {
+	if use debug && [[ ! $(portageq envvar FEATURES) =~ .*(splitdebug|nostrip).* ]]; then
+		ewarn "You have enabled debug flags and macros during compilation."
+		ewarn "For these to be useful, you should also have Portage retain debug symbols."
+		ewarn "See https://wiki.gentoo.org/wiki/Debugging on configuring your environment"
+		ewarn "and set your desired FEATURES before (re-)building this package."
+	fi
 	eapply_user
 	./autogen.sh
 }
 
 src_configure() {
+	use harden && append-flags -Wa,--noexecstack
+	append-flags "-I${BDB_INCLUDE_PATH}"
 	econf \
 		$(use_with daemon) \
 		$(use_with dbus qtdbus) \
 		$(use_with qt5 gui qt5) \
 		$(use_with qrcode qrencode) \
-		$(use_with upnp miniupnpc)
+		$(use_with upnp miniupnpc) \
+		$(use_with pic) \
+		$(use_with libraries libs) \
+		$(use_with utils) \
+		$(use_enable harden hardening ) \
+		$(use_enable bench) \
+		$(use_enable ccache ) \
+		$(use_enable static) \
+		$(use_enable debug) \
+		$(use_enable test tests)
 }
 
 src_compile() {
@@ -86,7 +110,7 @@ src_install() {
 
 pkg_postinst() {
 	elog
-	elog "You are using a source compiled version of the gridcoin staging branch."
+	elog "You are using a source compiled version of the gridcoin development branch."
 	ewarn "NB: This branch is only intended for debugging on the gridcoin testnet!"
 	ewarn "    Only proceed if you know what you are doing."
 	ewarn "    Testnet users must join Slack at https://teamgridcoin.slack.com #testnet"

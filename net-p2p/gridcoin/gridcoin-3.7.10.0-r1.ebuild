@@ -16,21 +16,27 @@ EGIT_COMMIT="${PV}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="+boinc dbus qrcode qt5 upnp"
+
+IUSE_GUI="qt5 dbus"
+IUSE_DAEMON="daemon"
+IUSE_OPTIONAL="+boinc qrcode upnp"
+IUSE="${IUSE_GUI} ${IUSE_DAEMON} ${IUSE_OPTIONAL}"
+
+REQUIRED_USE="|| ( daemon qt5 ) dbus? ( qt5 ) qrcode? ( qt5 )"
 
 DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
-	sys-libs/db:5.3
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
+	sys-libs/db:5.3
 	dbus? ( dev-qt/qtdbus:5 )
-	qrcode? ( media-gfx/qrencode )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
+	qrcode? ( media-gfx/qrencode )
 	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
 	boinc? ( sci-misc/boinc )"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/Gridcoin-Research-${PV}"
+S="${WORKDIR}/gridcoin-${PV}"
 
 pkg_setup() {
 	BDB_VER="$(best_version sys-libs/db:5.3)"
@@ -56,8 +62,10 @@ src_unpack() {
 
 src_compile() {
 	append-flags -Wa,--noexecstack
-	pushd "${S}/src" ; mkdir -p obj
-	emake -f makefile.unix ${BUILDOPTS} NO_UPGRADE=1
+	if use daemon ; then
+		pushd "${S}/src" ; mkdir -p obj
+		emake -f makefile.unix ${BUILDOPTS} NO_UPGRADE=1
+	fi
 	if use qt5 ; then
 		append-flags "-I${BDB_INCLUDE_PATH}"
 		popd ; eqmake5 ${BUILDOPTS} BDB_LIB_SUFFIX=${BDB_LIB_SUFFIX} NO_UPGRADE=1
@@ -66,8 +74,10 @@ src_compile() {
 }
 
 src_install() {
-	dobin src/gridcoinresearchd
-	doman doc/gridcoinresearchd.1
+	if use daemon ; then
+		dobin src/gridcoinresearchd
+		doman doc/gridcoinresearchd.1
+	fi
 	if use qt5 ; then
 		dobin gridcoinresearch
 		doman doc/gridcoinresearch.1
@@ -88,10 +98,11 @@ pkg_postinst() {
 	elog "The daemon can be found at /usr/bin/gridcoinresearchd"
 	use qt5 && elog "The graphical wallet can be found at /usr/bin/gridcoinresearch"
 	elog
-	elog "You need to configure this node with a few basic details to do anything useful with gridcoin."
-	elog "You can do this by editing /var/lib/${PN}/.GridcoinResearch/gridcoinresearch.conf"
-	elog "The howto for this configuration file is located at:"
-	elog "http://wiki.gridcoin.us/Gridcoinresearch_config_file"
+	elog "You need to configure this node with a few basic details to do anything"
+	elog "useful with gridcoin. The wallet configuration file is located at:"
+	elog "    /etc/conf.d/gridcoinresearch"
+	elog "The wiki for this configuration file is located at:"
+	elog "    http://wiki.gridcoin.us/Gridcoinresearch_config_file"
 	elog
 	if use boinc ; then
 		elog "To run your wallet as a researcher you should add gridcoin user to boinc group."
