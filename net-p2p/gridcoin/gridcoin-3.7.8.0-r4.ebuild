@@ -20,7 +20,7 @@ IUSE="+boinc dbus qrcode qt5 upnp"
 
 DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
-	>=sys-libs/db-5.3.28:*
+	sys-libs/db:5.3
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
 	dbus? ( dev-qt/qtdbus:5 )
@@ -33,8 +33,9 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/Gridcoin-Research-${PV}"
 
 pkg_setup() {
-	BDB_VER="$(best_version sys-libs/db)"
+	BDB_VER="$(best_version sys-libs/db:5.3)"
 	export BDB_INCLUDE_PATH="/usr/include/db${BDB_VER:12:3}"
+	export BDB_LIB_SUFFIX="-${BDB_VER:12:3}"
 	use upnp || BUILDOPTS+="USE_UPNP=- "
 	use upnp && BUILDOPTS+="USE_UPNP=1 "
 	use dbus || BUILDOPTS+="USE_DBUS=- "
@@ -55,13 +56,13 @@ src_unpack() {
 
 src_compile() {
 	append-flags -Wa,--noexecstack
+	pushd "${S}/src" ; mkdir -p obj
+	emake -f makefile.unix ${BUILDOPTS} NO_UPGRADE=1
 	if use qt5 ; then
 		append-flags "-I${BDB_INCLUDE_PATH}"
-		eqmake5 ${BUILDOPTS} NO_UPGRADE=1
+		popd ; eqmake5 ${BUILDOPTS} BDB_LIB_SUFFIX=${BDB_LIB_SUFFIX} NO_UPGRADE=1
 		emake
 	fi
-	cd "${S}/src" ; mkdir -p obj
-	emake -f makefile.unix ${BUILDOPTS} NO_UPGRADE=1
 }
 
 src_install() {
@@ -98,4 +99,10 @@ pkg_postinst() {
 		elog "gpasswd -a gridcoin boinc"
 		elog
 	fi
+	ewarn "Previous releases of this package may have built/linked inconsistently"
+	ewarn "against Berkeley DB headers/libraries! If you already had sys-libs/db:6.0"
+	ewarn "available with a prior installation of this package, Gridcoin may prompt"
+	ewarn "you to clear your blockchain and peer databases. Be advised that official"
+	ewarn "snapshots of the blockchain are available to speed up wallet syncing at:"
+	ewarn "https://download.gridcoin.us/download/downloadstake/signed/snapshot.zip"
 }
