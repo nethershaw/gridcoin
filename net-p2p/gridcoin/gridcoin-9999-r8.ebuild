@@ -40,7 +40,8 @@ S="${WORKDIR}/gridcoin-${PV}"
 
 pkg_setup() {
 	BDB_VER="$(best_version sys-libs/db:4.8)"
-	export BDB_INCLUDE_PATH="/usr/include/db${BDB_VER:12:3}"
+	export BDB_CFLAGS="-I/usr/include/db${BDB_VER:12:3}"
+	export BDB_LIBS="-ldb_cxx-${BDB_VER:12:3}"
 
 	enewgroup ${PN}
 	local groups="${PN}"
@@ -67,7 +68,6 @@ src_prepare() {
 
 src_configure() {
 	use harden && append-flags -Wa,--noexecstack
-	append-flags "-I${BDB_INCLUDE_PATH}"
 	econf \
 		$(use_with daemon) \
 		$(use_with dbus qtdbus) \
