@@ -27,7 +27,7 @@ DEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
-	sys-libs/db:4.8
+	sys-libs/db:5.3
 	dbus? ( dev-qt/qtdbus:5 )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
 	qrcode? ( media-gfx/qrencode )
@@ -39,7 +39,7 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/gridcoin-${PV}"
 
 pkg_setup() {
-	BDB_VER="$(best_version sys-libs/db:4.8)"
+	BDB_VER="$(best_version sys-libs/db:5.3)"
 	export BDB_CFLAGS="-I/usr/include/db${BDB_VER:12:3}"
 	export BDB_LIBS="-ldb_cxx-${BDB_VER:12:3}"
 
