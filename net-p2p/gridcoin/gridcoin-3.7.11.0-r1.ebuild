@@ -62,13 +62,13 @@ src_unpack() {
 
 src_compile() {
 	append-flags -Wa,--noexecstack
+	append-flags "-I${BDB_INCLUDE_PATH}"
 	if use daemon ; then
-		pushd "${S}/src" ; mkdir -p obj
+		cd "${S}/src" ; mkdir -p obj
 		emake -f makefile.unix ${BUILDOPTS} NO_UPGRADE=1
 	fi
 	if use qt5 ; then
-		append-flags "-I${BDB_INCLUDE_PATH}"
-		popd ; eqmake5 ${BUILDOPTS} BDB_LIB_SUFFIX=${BDB_LIB_SUFFIX} NO_UPGRADE=1
+		cd "${S}" ; eqmake5 ${BUILDOPTS} BDB_LIB_SUFFIX=${BDB_LIB_SUFFIX} NO_UPGRADE=1
 		emake
 	fi
 }
