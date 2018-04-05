@@ -5,7 +5,7 @@ A Gentoo GNU/Linux overlay containing ebuilds for the [Gridcoin-Research](https:
 
 Upstream home page: https://gridcoin.us/
 
-If you use this overlay, please give us a :star: so that we might how useful we're being.
+If you use this overlay, please give us a :star: so that we might see how useful we're being.
 
 ## Adding with layman
 ```shell
