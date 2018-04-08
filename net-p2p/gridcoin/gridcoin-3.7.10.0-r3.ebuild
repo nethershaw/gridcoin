@@ -24,17 +24,18 @@ IUSE="${IUSE_GUI} ${IUSE_DAEMON} ${IUSE_OPTIONAL}"
 
 REQUIRED_USE="|| ( daemon qt5 ) dbus? ( qt5 ) qrcode? ( qt5 )"
 
-DEPEND=">=dev-libs/boost-1.55.0
+RDEPEND=">=dev-libs/boost-1.55.0
 	>=dev-libs/openssl-1.0.1g
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
-	sys-libs/db:5.3
+	sys-libs/db:5.3[cxx]
 	dbus? ( dev-qt/qtdbus:5 )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
 	qrcode? ( media-gfx/qrencode )
 	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
 	boinc? ( sci-misc/boinc )"
-RDEPEND="${DEPEND}"
+DEPEND="${DEPEND}
+	qt5? ( dev-qt/linguist-tools:5 )"
 
 S="${WORKDIR}/gridcoin-${PV}"
 
