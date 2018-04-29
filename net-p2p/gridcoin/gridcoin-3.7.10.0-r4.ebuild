@@ -3,10 +3,7 @@
 
 EAPI=6
 
-inherit flag-o-matic
-inherit qmake-utils
-inherit user
-inherit git-r3
+inherit flag-o-matic qmake-utils user git-r3 systemd
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
@@ -78,6 +75,8 @@ src_install() {
 	if use daemon ; then
 		dobin src/gridcoinresearchd
 		doman doc/gridcoinresearchd.1
+		newinitd "${FILESDIR}"/gridcoin.init gridcoin
+		systemd_dounit "${FILESDIR}"/gridcoin.service
 	fi
 	if use qt5 ; then
 		dobin gridcoinresearch
