@@ -10,10 +10,10 @@ inherit git-r3
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
 EGIT_REPO_URI="https://github.com/gridcoin/Gridcoin-Research.git"
-EGIT_BRANCH="development"
+EGIT_BRANCH="staging"
 
 LICENSE="MIT"
-SLOT="testnet"
+SLOT="9999"
 KEYWORDS=""
 
 IUSE_GUI="qt5 dbus"
