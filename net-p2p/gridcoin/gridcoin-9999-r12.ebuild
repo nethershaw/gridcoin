@@ -29,7 +29,7 @@ RDEPEND=">=dev-libs/boost-1.55.0
 	dev-libs/libevent
 	sys-libs/db:5.3[cxx]
 	dbus? ( dev-qt/qtdbus:5 )
-	qt5? ( dev-qt/qtcore:5 dev-qt/qtnetwork:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
+	qt5? ( dev-qt/qtcore:5 dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
 	qrcode? ( media-gfx/qrencode )
 	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
 	boinc? ( sci-misc/boinc )
