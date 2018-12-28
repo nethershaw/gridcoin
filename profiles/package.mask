@@ -1,0 +1,3 @@
+# Matt 'Archer' Vaughn <nethershaw@gmail.com> (28 Dec 2018)
+# Unsupported by upstream. Removal in 30 days.
+<net-p2p/gridcoin-4.0.0.0
