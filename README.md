@@ -9,7 +9,7 @@ If you use this overlay, please give us a :star: so that we might see how useful
 
 ## Adding with layman
 ```shell
-layman -f -o https://raw.githubusercontent.com/nethershaw/gridcoin/master/repositories.xml -a gridcoin
+layman -f -o https://raw.githubusercontent.com/matthew-sharp/gridcoin/master/repositories.xml -a gridcoin
 ```
 ## Retention of ebuilds
 Upstream publishes two types of Gridcoin wallet software releases: _leisure_ and _mandatory_. Leisure releases are backward-compatible and may include minor improvements, whereas a mandatory release is not backward-compatible and invalidates all prior releases of the client.
