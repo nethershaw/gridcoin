@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit flag-o-matic user git-r3 systemd desktop
+inherit flag-o-matic git-r3 systemd desktop
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
@@ -21,8 +21,8 @@ IUSE="${IUSE_GUI} ${IUSE_DAEMON} ${IUSE_OPTIONAL}"
 
 REQUIRED_USE="|| ( daemon qt5 ) dbus? ( qt5 ) qrcode? ( qt5 )"
 
-RDEPEND=">=dev-libs/boost-1.55.0
-	>=dev-libs/openssl-1.0.1g:=
+RDEPEND=">=dev-libs/boost-1.73.0
+	>=dev-libs/openssl-1.1.1d:=
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
 	sys-libs/db:5.3[cxx]
@@ -31,6 +31,7 @@ RDEPEND=">=dev-libs/boost-1.55.0
 	qrcode? ( media-gfx/qrencode )
 	upnp? ( >=net-libs/miniupnpc-1.9.20140401 )
 	boinc? ( sci-misc/boinc )
+	acct-user/${PN}[boinc?]
 	utils? ( net-p2p/bitcoin-cli dev-util/bitcoin-tx )"
 DEPEND="${RDEPEND}
 	qt5? ( dev-qt/linguist-tools:5 )"
@@ -41,11 +42,6 @@ pkg_setup() {
 	BDB_VER="$(best_version sys-libs/db:5.3)"
 	export BDB_CFLAGS="-I/usr/include/db${BDB_VER:12:3}"
 	export BDB_LIBS="-ldb_cxx-${BDB_VER:12:3}"
-
-	enewgroup ${PN}
-	local groups="${PN}"
-	use boinc && groups+=",boinc"
-	enewuser ${PN} -1 -1 /var/lib/${PN} "${groups}"
 }
 
 src_unpack() {

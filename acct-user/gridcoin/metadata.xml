@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+<email>sharpshopter@gmail.com</email>
+</maintainer>
+<longdescription lang="en">
+Gridcoin crypto-currency wallet that rewards BOINC computation
+https://gridcoin.us/
+https://github.com/gridcoin/Gridcoin-Research
+</longdescription>
+<use>
+<flag name="boinc">
+Enable research wallet functions for BOINC mining
+</flag>
+</use>
+</pkgmetadata>
