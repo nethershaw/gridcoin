@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -21,10 +21,10 @@ IUSE="${IUSE_GUI} ${IUSE_DAEMON} ${IUSE_OPTIONAL}"
 
 REQUIRED_USE="|| ( daemon qt5 ) dbus? ( qt5 ) qrcode? ( qt5 )"
 
-RDEPEND=">=dev-libs/boost-1.55.0
-	>=dev-libs/openssl-1.0.1g:=
+RDEPEND=">=dev-libs/boost-1.60
+	>=dev-libs/openssl-1.1.1l:=
 	>=dev-libs/libzip-1.3.0
-	dev-libs/libevent
+	>=dev-libs/libevent-2.1.12
 	sys-libs/db:5.3[cxx]
 	dbus? ( dev-qt/qtdbus:5 )
 	qt5? ( dev-qt/qtcore:5 dev-qt/qtgui:5 dev-qt/qtnetwork:5 dev-qt/qtwidgets:5 dev-qt/qtconcurrent:5 dev-qt/qtcharts:5 )
@@ -103,7 +103,7 @@ src_install() {
 	dodoc README.md CHANGELOG.md doc/build-unix.md
 
 	diropts -o${PN} -g${PN}
-	keepdir /var/lib/${PN}/.GridcoinResearch/testnet/
+	keepdir /var/lib/${PN}/.GridcoinResearch/
 	newconfd "${FILESDIR}"/gridcoinresearch.conf gridcoinresearch
 	fowners gridcoin:gridcoin /etc/conf.d/gridcoinresearch
 	fperms 0660 /etc/conf.d/gridcoinresearch

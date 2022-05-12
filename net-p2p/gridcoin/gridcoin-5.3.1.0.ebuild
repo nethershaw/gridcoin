@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-inherit flag-o-matic qmake-utils user git-r3 systemd
+inherit flag-o-matic user git-r3 systemd desktop
 
 DESCRIPTION="Gridcoin Proof-of-Stake based crypto-currency that rewards BOINC computation"
 HOMEPAGE="https://gridcoin.us/"
@@ -21,8 +21,8 @@ IUSE="${IUSE_GUI} ${IUSE_DAEMON} ${IUSE_OPTIONAL}"
 
 REQUIRED_USE="|| ( daemon qt5 ) dbus? ( qt5 ) qrcode? ( qt5 )"
 
-RDEPEND=">=dev-libs/boost-1.55.0
-	>=dev-libs/openssl-1.0.1g:=
+RDEPEND=">=dev-libs/boost-1.73.0
+	>=dev-libs/openssl-1.1.1d:=
 	>=dev-libs/libzip-1.3.0
 	dev-libs/libevent
 	sys-libs/db:5.3[cxx]
@@ -94,11 +94,16 @@ src_install() {
 	if use qt5 ; then
 		newbin src/qt/gridcoinresearch gridcoinresearch
 		newman doc/gridcoinresearch.1 gridcoinresearch.1
+		domenu contrib/gridcoinresearch.desktop
+		for size in 16 22 24 32 48 64 128 256 ; do
+			doicon -s "${size}" "share/icons/hicolor/${size}x${size}/apps/gridcoinresearch.png"
+		done
+		doicon -s scalable "share/icons/hicolor/scalable/apps/gridcoinresearch.svg"
 	fi
 	dodoc README.md CHANGELOG.md doc/build-unix.md
 
 	diropts -o${PN} -g${PN}
-	keepdir /var/lib/${PN}/.GridcoinResearch/testnet/
+	keepdir /var/lib/${PN}/.GridcoinResearch/
 	newconfd "${FILESDIR}"/gridcoinresearch.conf gridcoinresearch
 	fowners gridcoin:gridcoin /etc/conf.d/gridcoinresearch
 	fperms 0660 /etc/conf.d/gridcoinresearch
